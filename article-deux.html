@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./assets/favicon/favicon.ico" type="image/x-icon" />
+    
+    <!-- Map CSS -->
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css" />
+    
+    <!-- Libs CSS -->
+    <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+    
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+    
+    <!-- Title -->
+    <title>4eme</title>
+
+    <!-- Custom CSS -->
+      <style>
+        body {
+          background-image: url('https://images.squarespace-cdn.com/content/v1/61c48c37943c6c7617350749/1661165731194-F9VQ346CF60XE8F7PL3V/L%27ECLUSE-w.jpg?format=1500w');
+          background-size: cover;
+          background-position: center;
+          background-repeat: repeat;
+          position: relative; /* Required for absolute positioning of overlay */
+        }
+  
+        /* Dark overlay */
+        .dark-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.66); /* Adjust opacity here (0.5 is 50%) */
+          z-index: 1; /* Ensure the overlay is above other content */
+        }
+
+      .white {
+        color: white;
+      }
+      .white:hover {
+        color: white
+      }
+      </style>
+  </head>
+  <body>
+    <div class="dark-overlay"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+      <div class="container">
+    
+        <!-- Brand -->
+        <div class="avatar avatar-xl">
+          <a class="navbar-brand" href="./index.html">
+            <img src="data:image/png;base64,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" class="avatar-img rounded-circle" alt="...">
+          </a>
+        </div>
+
+        
+    
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <!-- Collapse -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+    
+          <!-- Toggler -->
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fe fe-x"></i>
+          </button>
+    
+          <!-- Navigation -->
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarLandings" data-bs-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                <a href="article-un.html">5eme
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarPages" data-bs-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                <a href="article-deux.html">4eme
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarAccount" data-bs-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                <a href="article-trois.html">3eme</a>
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarAccount" data-bs-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                <a href="article-quatre.html">Divers</a>
+              </a>
+            </li>
+        </ul>
+    
+          <!-- Button -->
+          <a class="navbar-btn btn btn-sm btn-primary lift ms-auto" href="https://sites.google.com/site/clgpasteur" target="_blank">
+            Site originel
+          </a>
+    
+        </div>
+    
+      </div>
+    </nav>
+
+    <div class="container text-center white">
+      <h3>Bonjour, vous avez ici tous les liens aux ressources nécessaires pour le programme de technologie de quatrième. L'auteur de ce site n'est pas responsable pour le malfonctionnement des liens proposés.<h3>
+<!-- Mettre tous les liens de 4eme avec les row etc... -->
+      <div class="row py-2">
+        <a href="https://www.youtube.com/watch?v=vTrYa3g4tHQ" class="white">Comment concevoir un logement confortable ?</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/comment-fonctionne-une-%C3%A9cluse?authuser=0" class="white">Comment fonctionne une écluse ?</a>
+      </div>
+      <div class="rowpy-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/introduction-%C3%A0-la-domotique?authuser=0" class="white">Introduction à la domotique</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://www.youtube.com/watch?v=42VYgbbUcNc" class="white">Tutoriel vidéo X-Mind</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/domotique-et-confort?authuser=0" class="white">Domotique et confort</a>
+      </div>
+      <div class="row py-2">
+        <p><a href="https://drive.google.com/file/d/1UYt9mmBIiHuMZMp2TwxFJtveT2A0AFR1/view" class="white">Lightbot</a>
+            <span class="white"> et ses documents travail : </span>
+            <a href="https://drive.google.com/file/d/1Y3tIaVt9l5ML5qW78LDdsY2O-17dvHIS/view" class="white">n°1 , </a>
+            <a href="https://drive.google.com/file/d/147iPxelYdd314xq9Px0iBgZ8V97rF0SD/view" class="white">n°2 , </a>
+            <a href="https://drive.google.com/file/d/1KakYxEPzvGMMcwVgV3QtwttIjNz8uF1I/view" class="white">n°3</a></p>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/scratch-activit%C3%A9s?authuser=0" class="white">Activités scratch</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/des-objets-techniques-pour-notre-confort?authuser=0" class="white">Des objets techniques pour notre confort</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/efficacit%C3%A9-%C3%A9nerg%C3%A9tique-et-commande-l%C3%A9clairage?authuser=0" class="white">Efficacité énergetique et commande : électricité</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/se-loger-dans-un-conteneur?authuser=0" class="white">Se loger dans un conteneur</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/repr%C3%A9sentation-fonctionnelle-chauffe-eau-solaire?authuser=0" class="white">Représentation fonctionnelle : chauffe-eau solaire</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/pour-r%C3%A9viser-le-contr%C3%B4le-commun-de-technologie?authuser=0" class="white">Pour réviser le contrôle commun de technologie</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/des-objets-techniques-qui-%C3%A9voluent-pour-notre-confort?authuser=0" class="white">Des objets techniques qui évoluent pour notre confort</a>
+      </div>
+      <div class="row py-2">
+        <a href="http://www.linternaute.com/video/56474/une-maison-domotisee-en-plein-paris/" class="white">Vidéo "Une maison domotisée en plein Paris"</a>
+      </div>
+      <div class="row py-2">
+        <a href="http://dc176.4shared.com/download/169458599/a879dc88/Impress_tutoriel.pdf" class="white">Tutoriel Open-Impress</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://fr.scribd.com/doc/26226205/Presentation" class="white">Comment réaliser un bon diaporama</a>
+      </div>
+      <div class="row py-2">
+        <a href="http://dc161.4shared.com/download/213286693/13c4b1c2/Ralisation_dun_diaporama_effic.pdf" class="white">Réaliser un diaporama efficace</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/les-%C3%A9nergies?authuser=0" class="white">Les énergies</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://lemeilleuravis.net/meilleure-box-domotique/" class="white">Des solutions pour le chauffage</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://www.sweethome3d.com/fr/userGuide.jsp" class="white">Logiciel Sweet-Home-3d</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://www.youtube.com/watch?v=1B8fBmLIsh8" class="white">Découverte de Pix</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://leclerc.ecollege.haute-garonne.fr/espaces-pedagogiques/technologie/4eme/page-de-garde-classeur-1017.htm" class="white">Ressource pour réaliser la page de garde</a>
+      </div>
+      <div class="row py-2">
+        <a href="http://a.bouque.eurotech.free.fr/4/4_2_CTI/documents/netexpress/netexpress/index.html" class="white">Net-Express</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://sites.google.com/site/clgpasteur/4eme/le-tr%C3%A8s-haut-d%C3%A9bit?authuser=0" class="white">Le très haut débit (THD)</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://carrefour-numerique.cite-sciences.fr/ressources/flash/anims/cyberbase04/" class="white">Lien pour réviser et terminer le questionnaire sur l'arborescence</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://carrefour-numerique.cite-sciences.fr/ressources/flash/anims/internet/cyberbase07_home.html" class="white">Lien pour reviser le questionnaire sur les réseaux et internet</a>
+      </div>
+      <div class="row py-2">
+        <a href="https://carrefour-numerique.cite-sciences.fr/ressources/flash/anims/virus/cyberbase06_home.html" class="white">Lien pour terminer et réviser le questionnaire sur les virus informatiques</a>
+      </div>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <!-- Map JS -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+    
+    <!-- Vendor JS -->
+    <script src="./assets/js/vendor.bundle.js"></script>
+    
+    <!-- Theme JS -->
+    <script src="./assets/js/theme.bundle.js"></script>
+
+  </body>
+</html>
